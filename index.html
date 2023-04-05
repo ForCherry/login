@@ -59,7 +59,7 @@
 	<!-- <script src="./js/moment.js"></script> -->
 	<script src="./js/jquery.min.js"></script>
 	<script src="./js/eventsource.min.js"></script>
-	<!-- <script src="./js/localforage.min.js"></script> -->
+	<script src="./js/localforage.min.js"></script>
 	<script src="./js/vant.min.js"></script>
 
 
@@ -282,47 +282,47 @@
 					vant.showDialog({ message: '未检测到登陆禁止访问~' });
 					window.location.href = "./login.html";
 				} else {
-// 					localforage.getItem('chatDB', function (err, value) {
-// 						console.log("获取聊天记录");
-// 						// 当离线仓库中的值被载入时，此处代码运行
-// 						console.log(err, value);
-// 						if (!value) {
-// 							return
-// 						}
-// 						this.hasLocalforage = true;
-// 						// 获取id=messages的内的html内容
-// 						let messageDOM = document.getElementById("messages");
-// 						console.log(messageDOM);
-// 						// 把value 添加到 meesageDOM中
-// // 						messageDOM.innerHTML = `<div class="message" hidden=""><span>:你</span><p> 你好 </p></div><div id="fa5e10e5-a74a-4717-b0a9-4b5a8215070a" class="message"><span>ChatGpt:</span><p id="fa5e10e5-a74a-4717-b0a9-4b5a8215070a"> 你好，有什么可以帮助您的吗？</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 02: 59)</van-tag>你 </span><p> 前端保存聊天记录的方法 </p></div><div id="7c8ef44a-4a2d-4382-bbe5-b6e4bec24b0a" class="message"><span>ChatGpt:</span><p id="7c8ef44a-4a2d-4382-bbe5-b6e4bec24b0a">  前端保存聊天记录的方法有以下几种：
+					localforage.getItem('chatDB', function (err, value) {
+						console.log("获取聊天记录");
+						// 当离线仓库中的值被载入时，此处代码运行
+						console.log(err, value);
+						if (!value) {
+							return
+						}
+						this.hasLocalforage = true;
+						// 获取id=messages的内的html内容
+						let messageDOM = document.getElementById("messages");
+						console.log(messageDOM);
+						// 把value 添加到 meesageDOM中
+// 						messageDOM.innerHTML = `<div class="message" hidden=""><span>:你</span><p> 你好 </p></div><div id="fa5e10e5-a74a-4717-b0a9-4b5a8215070a" class="message"><span>ChatGpt:</span><p id="fa5e10e5-a74a-4717-b0a9-4b5a8215070a"> 你好，有什么可以帮助您的吗？</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 02: 59)</van-tag>你 </span><p> 前端保存聊天记录的方法 </p></div><div id="7c8ef44a-4a2d-4382-bbe5-b6e4bec24b0a" class="message"><span>ChatGpt:</span><p id="7c8ef44a-4a2d-4382-bbe5-b6e4bec24b0a">  前端保存聊天记录的方法有以下几种：
 
-// // 1. 使用浏览器的本地存储（localStorage或sessionStorage）来保存聊天记录。这种方法可以在用户关闭浏览器后仍然保存聊天记录，但是存储容量有限。
+// 1. 使用浏览器的本地存储（localStorage或sessionStorage）来保存聊天记录。这种方法可以在用户关闭浏览器后仍然保存聊天记录，但是存储容量有限。
 
-// // 2. 使用cookie来保存聊天记录。这种方法可以在用户关闭浏览器后仍然保存聊天记录，但是存储容量也有限。
+// 2. 使用cookie来保存聊天记录。这种方法可以在用户关闭浏览器后仍然保存聊天记录，但是存储容量也有限。
 
-// // 3. 使用服务器端的数据库来保存聊天记录。这种方法可以保存大量的聊天记录，但需要服务器端的支持。
+// 3. 使用服务器端的数据库来保存聊天记录。这种方法可以保存大量的聊天记录，但需要服务器端的支持。
 
-// // 4. 使用第三方的云存储服务（如七牛云、阿里云等）来保存聊天记录。这种方法可以保存大量的聊天记录，但需要付费。
+// 4. 使用第三方的云存储服务（如七牛云、阿里云等）来保存聊天记录。这种方法可以保存大量的聊天记录，但需要付费。
 
-// // 需要根据具体的需求和场景选择合适的方法来保存聊天记录。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 04: 02)</van-tag>你 </span><p> localStorage可以保存多少内存聊天记录 </p></div><div id="31294b34-9103-420e-8f1f-3a008a7fb4ea" class="message"><span>ChatGpt:</span><p id="31294b34-9103-420e-8f1f-3a008a7fb4ea">  localStorage的存储容量是有限制的，通常为5MB左右，具体容量取决于浏览器的实现。因此，如果聊天记录过多，超出了localStorage的容量限制，就需要考虑其他的存储方式，比如使用服务器端的数据库进行存储。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 04: 35)</van-tag>你 </span><p> localStorage保存满了可以继续替换吗 </p></div><div id="ebb67d5c-45c6-45eb-b5b0-ec08178e4453" class="message"><span>ChatGpt:</span><p id="ebb67d5c-45c6-45eb-b5b0-ec08178e4453">  localStorage的存储容量是有限制的，不同浏览器的限制也不同，一般在5MB左右。如果localStorage已经保存满了，就不能继续往里面添加数据了。如果要继续保存聊天记录，可以考虑使用IndexedDB或WebSQL等其他的浏览器本地存储方案，或者将聊天记录保存在服务器端。如果要替换localStorage中的数据，可以使用setItem()方法，将新的数据覆盖掉旧的数据。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 05: 32)</van-tag>你 </span><p> indexedDB怎么保存聊天记录 </p></div><div id="7b03dcbe-fa40-4388-99ad-8b30259433db" class="message"><span>ChatGpt:</span><p id="7b03dcbe-fa40-4388-99ad-8b30259433db">  IndexedDB是一个浏览器内置的数据库，可以用来保存大量的数据，包括聊天记录。下面是一个简单的示例代码，用于保存聊天记录到IndexedDB中：
+// 需要根据具体的需求和场景选择合适的方法来保存聊天记录。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 04: 02)</van-tag>你 </span><p> localStorage可以保存多少内存聊天记录 </p></div><div id="31294b34-9103-420e-8f1f-3a008a7fb4ea" class="message"><span>ChatGpt:</span><p id="31294b34-9103-420e-8f1f-3a008a7fb4ea">  localStorage的存储容量是有限制的，通常为5MB左右，具体容量取决于浏览器的实现。因此，如果聊天记录过多，超出了localStorage的容量限制，就需要考虑其他的存储方式，比如使用服务器端的数据库进行存储。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 04: 35)</van-tag>你 </span><p> localStorage保存满了可以继续替换吗 </p></div><div id="ebb67d5c-45c6-45eb-b5b0-ec08178e4453" class="message"><span>ChatGpt:</span><p id="ebb67d5c-45c6-45eb-b5b0-ec08178e4453">  localStorage的存储容量是有限制的，不同浏览器的限制也不同，一般在5MB左右。如果localStorage已经保存满了，就不能继续往里面添加数据了。如果要继续保存聊天记录，可以考虑使用IndexedDB或WebSQL等其他的浏览器本地存储方案，或者将聊天记录保存在服务器端。如果要替换localStorage中的数据，可以使用setItem()方法，将新的数据覆盖掉旧的数据。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 05: 32)</van-tag>你 </span><p> indexedDB怎么保存聊天记录 </p></div><div id="7b03dcbe-fa40-4388-99ad-8b30259433db" class="message"><span>ChatGpt:</span><p id="7b03dcbe-fa40-4388-99ad-8b30259433db">  IndexedDB是一个浏览器内置的数据库，可以用来保存大量的数据，包括聊天记录。下面是一个简单的示例代码，用于保存聊天记录到IndexedDB中：
 
-// // 在上面的代码中，我们首先打开了一个名为chatDB的数据库，并创建了一个名为chat的存储对象。然后，我们创建了一个聊天记录对象，并将其添加到chat存储对象中。如果添加成功，就会在控制台输出一条成功信息，否则会输出一条错误信息。
+// 在上面的代码中，我们首先打开了一个名为chatDB的数据库，并创建了一个名为chat的存储对象。然后，我们创建了一个聊天记录对象，并将其添加到chat存储对象中。如果添加成功，就会在控制台输出一条成功信息，否则会输出一条错误信息。
 
-// // IndexedDB可以保存大量的数据，但具体能保存多少内存聊天记录取决于浏览器和设备的性能和存储容量。如果IndexedDB保存满了，可以通过删除旧的聊天记录或者使用其他存储方式来解决。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 09: 05)</van-tag>你 </span><p> 移动端也可以这样吗 </p></div><div id="dba22187-1041-4fed-8e4a-661b4f7ed930" class="message"><span>ChatGpt:</span><p id="dba22187-1041-4fed-8e4a-661b4f7ed930">  是的，前端保存聊天记录的方法在移动端也是适用的。不过需要注意的是，移动端的存储空间相对较小，需要谨慎使用，避免占用过多的存储空间。同时，移动端的存储方式可能会有所不同，需要根据具体情况进行选择。例如，移动端可以使用SQLite数据库来保存聊天记录。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 09: 29)</van-tag>你 </span><p> SQLite如何保存呢 </p></div><div id="6d1a9f3f-924f-45ce-8006-4bba3eafc722" class="message"><span>ChatGpt:</span><p id="6d1a9f3f-924f-45ce-8006-4bba3eafc722">  SQLite是一种轻量级的关系型数据库，可以在移动端使用。以下是使用SQLite保存聊天记录的步骤：
+// IndexedDB可以保存大量的数据，但具体能保存多少内存聊天记录取决于浏览器和设备的性能和存储容量。如果IndexedDB保存满了，可以通过删除旧的聊天记录或者使用其他存储方式来解决。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 09: 05)</van-tag>你 </span><p> 移动端也可以这样吗 </p></div><div id="dba22187-1041-4fed-8e4a-661b4f7ed930" class="message"><span>ChatGpt:</span><p id="dba22187-1041-4fed-8e4a-661b4f7ed930">  是的，前端保存聊天记录的方法在移动端也是适用的。不过需要注意的是，移动端的存储空间相对较小，需要谨慎使用，避免占用过多的存储空间。同时，移动端的存储方式可能会有所不同，需要根据具体情况进行选择。例如，移动端可以使用SQLite数据库来保存聊天记录。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 09: 29)</van-tag>你 </span><p> SQLite如何保存呢 </p></div><div id="6d1a9f3f-924f-45ce-8006-4bba3eafc722" class="message"><span>ChatGpt:</span><p id="6d1a9f3f-924f-45ce-8006-4bba3eafc722">  SQLite是一种轻量级的关系型数据库，可以在移动端使用。以下是使用SQLite保存聊天记录的步骤：
 
-// // 1. 创建数据库和表：使用SQLiteOpenHelper类创建数据库和表，表中包含聊天记录的各个字段。
+// 1. 创建数据库和表：使用SQLiteOpenHelper类创建数据库和表，表中包含聊天记录的各个字段。
 
-// // 2. 插入数据：使用SQLiteDatabase类的insert()方法向表中插入聊天记录。
+// 2. 插入数据：使用SQLiteDatabase类的insert()方法向表中插入聊天记录。
 
-// // 3. 查询数据：使用SQLiteDatabase类的query()方法查询聊天记录。
+// 3. 查询数据：使用SQLiteDatabase类的query()方法查询聊天记录。
 
-// // 4. 更新数据：使用SQLiteDatabase类的update()方法更新聊天记录。
+// 4. 更新数据：使用SQLiteDatabase类的update()方法更新聊天记录。
 
-// // 5. 删除数据：使用SQLiteDatabase类的delete()方法删除聊天记录。
+// 5. 删除数据：使用SQLiteDatabase类的delete()方法删除聊天记录。
 
-// // 需要注意的是，SQLite保存的数据是以文件形式存储在设备上的，因此需要注意数据的备份和恢复。同时，SQLite也有一定的存储限制，需要根据实际情况进行优化和管理。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 10: 12)</van-tag>你 </span><p> IndexedDB可以保存多少内存聊天记录 </p></div><div id="0b5a96eb-8d46-404a-a87e-6f16903e88da" class="message"><span>ChatGpt:</span><p id="0b5a96eb-8d46-404a-a87e-6f16903e88da">  IndexedDB的存储容量是没有限制的，但是不同的浏览器对IndexedDB的存储容量有不同的限制。一般来说，IndexedDB的存储容量在几十MB到几百MB之间，具体容量取决于浏览器和设备的硬件性能。如果需要保存大量的聊天记录，可以考虑使用分页或者定期清理旧的聊天记录来减少IndexedDB的存储压力。</p></div>`;
-// 						messageDOM.innerHTML = JSON.parse(value)
-// 		});
+// 需要注意的是，SQLite保存的数据是以文件形式存储在设备上的，因此需要注意数据的备份和恢复。同时，SQLite也有一定的存储限制，需要根据实际情况进行优化和管理。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 10: 12)</van-tag>你 </span><p> IndexedDB可以保存多少内存聊天记录 </p></div><div id="0b5a96eb-8d46-404a-a87e-6f16903e88da" class="message"><span>ChatGpt:</span><p id="0b5a96eb-8d46-404a-a87e-6f16903e88da">  IndexedDB的存储容量是没有限制的，但是不同的浏览器对IndexedDB的存储容量有不同的限制。一般来说，IndexedDB的存储容量在几十MB到几百MB之间，具体容量取决于浏览器和设备的硬件性能。如果需要保存大量的聊天记录，可以考虑使用分页或者定期清理旧的聊天记录来减少IndexedDB的存储压力。</p></div>`;
+						messageDOM.innerHTML = JSON.parse(value)
+		});
 				}
 			},
 		});
