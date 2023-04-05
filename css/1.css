@@ -1,0 +1,150 @@
+	body {
+		background-color: #fff;
+		font-family: Arial, sans-serif;
+		font-size: 14px;
+		margin: 0;
+		padding: 0;
+		overflow-x: hidden;
+	}
+
+	h1 {
+		color: #333;
+		font-size: 28px;
+		margin: 10px 0;
+		text-align: center;
+	}
+
+	.container {
+		/* border: 1px solid #ccc; */
+		/* border-radius: 5px; */
+		/* margin: 10px auto; */
+		/* max-width: 800px; */
+		/* padding: 20px; */
+		padding-bottom: 10vh;
+	}
+
+	#messages {
+		padding: 1rem;
+	}
+
+	#messages .message:not(#User) {
+		background-color: rgba(247, 247, 248, 1);
+	}
+
+	#User {
+		text-align: right;
+	}
+
+	/* #messages .message:nth-child(odd) {
+	  text-align: right;
+	} */
+
+	.message {
+		background-color: #fff;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		margin-bottom: 10px;
+		padding: 10px;
+		word-break: break-all;
+		word-wrap: break-word;
+		white-space: pre-wrap;
+	}
+
+	.message span {
+		display: block;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	.message p {
+		margin: 0;
+		padding: 0;
+	}
+
+	.form {
+		margin-top: 10px;
+		text-align: center;
+		position: fixed;
+		bottom: 0px;
+		/* padding: 1rem; */
+		background: black;
+		width: 100%;
+	}
+
+	.form input[type="text"] {
+		border-radius: 5px;
+		border: 1px solid #ccc;
+		font-size: 16px;
+		padding: 10px;
+		width: 70%;
+	}
+
+	.form input[type="submit"] {
+		background-color: #008CBA;
+		border: none;
+		border-radius: 5px;
+		color: #fff;
+		cursor: pointer;
+		font-size: 16px;
+		padding: 10px 20px;
+		transition: background-color 0.3s ease;
+	}
+
+	.form input[type="submit"]:hover {
+		background-color: #00688B;
+	}
+
+	@media only screen and (max-width: 600px) {
+		.form input[type="text"] {
+			width: 60%;
+		}
+
+		.form input[type="submit"] {
+			font-size: 14px;
+			padding: 8px 16px;
+		}
+	}
+
+	.tag {
+		color: #969799;
+		font-size: 10px;
+	}
+
+	#closeBtn {
+		/* height: 45px; */
+		/* width: 201px; */
+	}
+
+	.typing {
+		width: 18.5em;
+		height: 1.25em;
+		border-right: 1px solid transparent;
+		animation: typing 3.5s steps(37, end), blink-caret .75s step-end infinite;
+		font-family: Consolas, Monaco;
+		word-break: break-all;
+		overflow: hidden;
+	}
+
+	/* 打印效果 */
+	@keyframes typing {
+		from {
+			width: 0;
+		}
+
+		to {
+			width: 18.5em;
+		}
+	}
+
+	/* 光标闪啊闪 */
+	@keyframes blink-caret {
+
+		from,
+		to {
+			border-color: transparent;
+		}
+
+		50% {
+			border-color: currentColor;
+		}
+	}

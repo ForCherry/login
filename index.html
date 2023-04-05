@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>ChatGPT Room</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<!-- <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/vant@4/lib/index.css"> -->
+	<link rel="stylesheet" href="./css/vant4.css">
+	<link rel="stylesheet" href="./css/1.css">
+</head>
+
+<body>
+	<div class="container" id="app">
+	</div>
+	<!-- 界面 -->
+	<template id="t1">
+		<div>
+			<!-- <van-nav-bar title="标题" left-text="返回" left-arrow @click-left="onClickLeft" /> -->
+			<h1>ChatGPT Room</h1>
+			<!-- <div id="messages">
+			</div> -->
+			<div id="messages">
+				<div class="message" hidden>
+					<span>:你</span>
+					<p> 你好 </p>
+				</div>
+				<div id="fa5e10e5-a74a-4717-b0a9-4b5a8215070a" class="message" class="gptBg">
+					<span>ChatGpt:</span>
+					<p id="fa5e10e5-a74a-4717-b0a9-4b5a8215070a"> 你好，有什么可以帮助您的吗？</p>
+				</div>
+			</div>
+			<!--  -->
+
+			<form id="message-form" class="form">
+				<van-search v-model="value" show-action label="" placeholder="请输入您的问题">
+					<template #action>
+						<van-button :loading="loading" type="primary" loading-type="spinner"
+							@click="sendMessage(value)">发送</van-button>
+					</template>
+				</van-search>
+			</form>
+
+			<van-toast v-model:show="loading" style="padding: 0px" position='bottom' :duration="0" forbidClick="true">
+				<template #message>
+					<!-- <van-image :src="image" width="200" height="140" style="display: block" /> -->
+					<div id="closeBtn" @click.natvie="closeSSE">
+						<van-button loading hairline type="primary" loading-text="思考中..."></van-button>
+						<!-- <van-button type="primary" @click="closeSSE()">取消</van-button> -->
+						<!-- <span >取消</span> -->
+					</div>
+				</template>
+			</van-toast>
+		</div>
+	</template>
+
+	<script src="./js/vue@3"></script>
+	<script src="./js/md.min.js"></script>
+	<!-- <script src="./js/moment.js"></script> -->
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/eventsource.min.js"></script>
+	<!-- <script src="./js/localforage.min.js"></script> -->
+	<script src="./js/vant.min.js"></script>
+
+
+	<script type="text/javascript">
+
+		// 在 #app 标签下渲染一个按钮组件
+		const app = Vue.createApp({
+			template: "#t1",
+			data() {
+				return {
+					value: "",
+					loading: false,
+					sse: "",
+					eventSource: "",
+					// session:""
+					hasLocalforage: false,
+				}
+			},
+			watch: {
+				value(newV, oldV) {
+					// console.log(newV, oldV);
+					// this.value = newV.replace("`", '')
+					// this.value = newV.replace(/[^u4e00-u9fa5w]/g, '')
+				}
+
+			},
+
+			methods: {
+				format() {
+					const currentTime = new Date();
+					const year = currentTime.getFullYear();
+					const month = currentTime.getMonth() + 1;
+					const day = currentTime.getDate();
+					const hour = currentTime.getHours();
+					const minute = currentTime.getMinutes();
+					const second = currentTime.getSeconds();
+					return `${year}/${month}/${day} ${hour}:${minute < 10 ? "0" + minute : minute}:${second < 10 ? "0" + second : second}`;
+				},
+				onClickLeft() {
+					sessionStorage.clear()
+					history.back();
+				},
+
+				closeSSE() {
+					console.log("close");
+					// console.log(this.eventSource, eventSource);
+					eventSource._close()
+					this.loading = false
+					vant.showToast({ message: "您打断了思考🤔", position: 'bottom' })
+				},
+				// 发送聊天消息
+				sendMessage(message) {
+					let that = this
+					// $("#sumbit").setAttribute("loading")
+					console.log("sendMessage");
+
+					if (message == null || message == '' || message == 'null') {
+						return vant.showDialog({ message: '您暂未输入任何咒语~' });
+					}
+					var messageDiv = document.createElement('div');
+					var uuid_str = this.uuid();
+					let sse;
+					if (uid == null || uid == '' || uid == 'null') {
+						uid = this.uuid();
+					}
+					// 设置本地存储
+					window.localStorage.setItem("uid", uid);
+
+					// 在此处添加代码，将消息发送到服务器
+					// console.log(eventSource);
+					// http://localhost:8000/chat?message=
+					// http://119.8.44.174:8000/chat?message=
+
+					// vant.showLoadingToast('思考中...');
+					eventSource = new EventSourcePolyfill("http://119.8.44.174:8000/chat?message=" + message.toString(), {
+						headers: {
+							'Content-Type': 'text/event-stream',
+							'Cache-Control': 'no-cache',
+							'Connection': 'keep-alive',
+							'X-Accel-Buffering': 'no',
+							'uid': uid,
+							// 'session':this.session || session
+						},
+						withCredentials: true,
+						heartbeatTimeout: 120000,
+						timeout: 120000
+					});
+					this.eventSource = eventSource;
+
+
+
+					window.addEventListener('beforeunload', function (event) {
+						// vant.closeToast();
+						if (eventSource) {
+							eventSource.close();
+						}
+						that.sendMessage(that.value)
+						return vant.showDialog({ message: '您离开了页面，正在重连~' });
+
+					});
+
+					eventSource.onopen = function (event) {
+						that.loading = true
+						console.log('EventSource connected : onopen');
+						sse = event.target;
+						that.sse = sse
+						messageDiv.classList.add('message');
+						messageDiv.setAttribute("id", "User");
+						// console.log(messageDiv);
+						messageDiv.innerHTML = `<span><van-tag plain type="primary" class='tag'>(${that.format()})</van-tag>你 </span><p > ${message} </p>`;
+						messagesDiv.appendChild(messageDiv);
+						window.scrollTo(0, document.documentElement.scrollHeight)
+					};
+
+					eventSource.onmessage = function (event) {
+						console.log('message', event);
+						if (event.data == "[DONE]") {
+							that.loading = false
+							// closeToast();
+							that.value = ""
+							text = '';
+							// 接收到消息后，将消息写入文本页面中，并清空消息列表
+							// 检查本地是否有存储的消息，如果有，则添加本地存储的消息
+							let messageDOM = document.getElementById("messages").innerHTML();
+							console.log(messageDOM);
+							localforage.setItem('chatDB', JSON.stringify(messageDOM)).then(function (value) {
+								console.log(value);
+								console.error("保存聊天记录成功");
+							}).catch(function (err) {
+								// 当出错时，此处代码运行
+								console.error("保存聊天记录失败", err);
+							});
+
+							window.scrollTo(0, document.documentElement.scrollHeight)
+							if (sse) {
+								console.log("DONE");
+								sse.close();
+							}
+							return;
+						}
+						let json_data = JSON.parse(event.data)
+						if (json_data.content == null || json_data.content == 'null') {
+							text = '';
+							return;
+						}
+						// text = text + json_data.content;
+						text = json_data.content;
+						console.log(text);
+						that.receiveMessage(text, uuid_str);
+						window.scrollTo(0, document.documentElement.scrollHeight)
+					};
+
+					eventSource.onerror = function (event) {
+						// vant.closeToast();
+						that.loading = false
+						console.error('EventSource error:', event);
+						// $("#sumbit").removeAttr("loading")
+						if (event.status !== '401') {
+							vant.showToast({ message: "您登陆失效，请重新登录", position: 'bottom' })
+							window.location.href = "./login.html";
+						}
+						if (event.readyState === EventSource.CLOSED) {
+							console.log('connection is closed');
+						} else {
+							console.log("Error occured", event);
+						}
+						eventSource._close();
+						return vant.showDialog({ message: '当前访问人数过多，请稍后再试~' });
+					};
+				},
+				/**
+				 * 接受数据
+				 */
+				receiveMessage(text, uuid_str) {
+					console.log(text, uuid_str);
+					var messageDiv = document.getElementById(uuid_str);
+					if (messageDiv == null) {
+						messageDiv = document.createElement('div');
+						messageDiv.setAttribute("id", uuid_str);
+						messageDiv.classList.add('message');
+						messageDiv.innerHTML = `<span>ChatGpt:<van-tag plain type="primary" class='tag'>(${that.format()})</van-tag></span><p class="typing" id='${uuid_str}'>  ${text}</p>`;
+						messagesDiv.appendChild(messageDiv);
+					} else {
+						let p = messageDiv.getElementsByTagName('p')[0];
+						p.innerHTML = p.innerHTML + text;
+
+					}
+					// messagesDiv.scrollTop = messagesDiv.scrollHeight;
+				},
+				uuid() {
+					var s = [];
+					var hexDigits = "0123456789abcdef";
+					for (var i = 0; i < 36; i++) {
+						s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+					}
+					s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+					s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+					s[8] = s[13] = s[18] = s[23] = "-";
+
+					var uuid = s.join("");
+					return uuid;
+				},
+			},
+			watch: {
+			},
+			mounted() {
+				let self = this
+				document.onkeydown = function (e) {
+					let ev = document.all ? window.event : e
+					if (ev.keyCode === 13) {
+						self.sendMessage(self.value)
+					}
+				}
+			},
+			created() {
+				// console.log("inputVal ", this.inputVal);
+				this.session = window.sessionStorage.getItem("session")
+				console.log(this.session);
+				if (!this.session) {
+					vant.showDialog({ message: '未检测到登陆禁止访问~' });
+					window.location.href = "./login.html";
+				} else {
+// 					localforage.getItem('chatDB', function (err, value) {
+// 						console.log("获取聊天记录");
+// 						// 当离线仓库中的值被载入时，此处代码运行
+// 						console.log(err, value);
+// 						if (!value) {
+// 							return
+// 						}
+// 						this.hasLocalforage = true;
+// 						// 获取id=messages的内的html内容
+// 						let messageDOM = document.getElementById("messages");
+// 						console.log(messageDOM);
+// 						// 把value 添加到 meesageDOM中
+// // 						messageDOM.innerHTML = `<div class="message" hidden=""><span>:你</span><p> 你好 </p></div><div id="fa5e10e5-a74a-4717-b0a9-4b5a8215070a" class="message"><span>ChatGpt:</span><p id="fa5e10e5-a74a-4717-b0a9-4b5a8215070a"> 你好，有什么可以帮助您的吗？</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 02: 59)</van-tag>你 </span><p> 前端保存聊天记录的方法 </p></div><div id="7c8ef44a-4a2d-4382-bbe5-b6e4bec24b0a" class="message"><span>ChatGpt:</span><p id="7c8ef44a-4a2d-4382-bbe5-b6e4bec24b0a">  前端保存聊天记录的方法有以下几种：
+
+// // 1. 使用浏览器的本地存储（localStorage或sessionStorage）来保存聊天记录。这种方法可以在用户关闭浏览器后仍然保存聊天记录，但是存储容量有限。
+
+// // 2. 使用cookie来保存聊天记录。这种方法可以在用户关闭浏览器后仍然保存聊天记录，但是存储容量也有限。
+
+// // 3. 使用服务器端的数据库来保存聊天记录。这种方法可以保存大量的聊天记录，但需要服务器端的支持。
+
+// // 4. 使用第三方的云存储服务（如七牛云、阿里云等）来保存聊天记录。这种方法可以保存大量的聊天记录，但需要付费。
+
+// // 需要根据具体的需求和场景选择合适的方法来保存聊天记录。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 04: 02)</van-tag>你 </span><p> localStorage可以保存多少内存聊天记录 </p></div><div id="31294b34-9103-420e-8f1f-3a008a7fb4ea" class="message"><span>ChatGpt:</span><p id="31294b34-9103-420e-8f1f-3a008a7fb4ea">  localStorage的存储容量是有限制的，通常为5MB左右，具体容量取决于浏览器的实现。因此，如果聊天记录过多，超出了localStorage的容量限制，就需要考虑其他的存储方式，比如使用服务器端的数据库进行存储。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 04: 35)</van-tag>你 </span><p> localStorage保存满了可以继续替换吗 </p></div><div id="ebb67d5c-45c6-45eb-b5b0-ec08178e4453" class="message"><span>ChatGpt:</span><p id="ebb67d5c-45c6-45eb-b5b0-ec08178e4453">  localStorage的存储容量是有限制的，不同浏览器的限制也不同，一般在5MB左右。如果localStorage已经保存满了，就不能继续往里面添加数据了。如果要继续保存聊天记录，可以考虑使用IndexedDB或WebSQL等其他的浏览器本地存储方案，或者将聊天记录保存在服务器端。如果要替换localStorage中的数据，可以使用setItem()方法，将新的数据覆盖掉旧的数据。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 05: 32)</van-tag>你 </span><p> indexedDB怎么保存聊天记录 </p></div><div id="7b03dcbe-fa40-4388-99ad-8b30259433db" class="message"><span>ChatGpt:</span><p id="7b03dcbe-fa40-4388-99ad-8b30259433db">  IndexedDB是一个浏览器内置的数据库，可以用来保存大量的数据，包括聊天记录。下面是一个简单的示例代码，用于保存聊天记录到IndexedDB中：
+
+// // 在上面的代码中，我们首先打开了一个名为chatDB的数据库，并创建了一个名为chat的存储对象。然后，我们创建了一个聊天记录对象，并将其添加到chat存储对象中。如果添加成功，就会在控制台输出一条成功信息，否则会输出一条错误信息。
+
+// // IndexedDB可以保存大量的数据，但具体能保存多少内存聊天记录取决于浏览器和设备的性能和存储容量。如果IndexedDB保存满了，可以通过删除旧的聊天记录或者使用其他存储方式来解决。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 09: 05)</van-tag>你 </span><p> 移动端也可以这样吗 </p></div><div id="dba22187-1041-4fed-8e4a-661b4f7ed930" class="message"><span>ChatGpt:</span><p id="dba22187-1041-4fed-8e4a-661b4f7ed930">  是的，前端保存聊天记录的方法在移动端也是适用的。不过需要注意的是，移动端的存储空间相对较小，需要谨慎使用，避免占用过多的存储空间。同时，移动端的存储方式可能会有所不同，需要根据具体情况进行选择。例如，移动端可以使用SQLite数据库来保存聊天记录。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 09: 29)</van-tag>你 </span><p> SQLite如何保存呢 </p></div><div id="6d1a9f3f-924f-45ce-8006-4bba3eafc722" class="message"><span>ChatGpt:</span><p id="6d1a9f3f-924f-45ce-8006-4bba3eafc722">  SQLite是一种轻量级的关系型数据库，可以在移动端使用。以下是使用SQLite保存聊天记录的步骤：
+
+// // 1. 创建数据库和表：使用SQLiteOpenHelper类创建数据库和表，表中包含聊天记录的各个字段。
+
+// // 2. 插入数据：使用SQLiteDatabase类的insert()方法向表中插入聊天记录。
+
+// // 3. 查询数据：使用SQLiteDatabase类的query()方法查询聊天记录。
+
+// // 4. 更新数据：使用SQLiteDatabase类的update()方法更新聊天记录。
+
+// // 5. 删除数据：使用SQLiteDatabase类的delete()方法删除聊天记录。
+
+// // 需要注意的是，SQLite保存的数据是以文件形式存储在设备上的，因此需要注意数据的备份和恢复。同时，SQLite也有一定的存储限制，需要根据实际情况进行优化和管理。</p></div><div class="message" id="User"><span><van-tag plain="" type="primary" class="tag">(2023/4/5 13: 10: 12)</van-tag>你 </span><p> IndexedDB可以保存多少内存聊天记录 </p></div><div id="0b5a96eb-8d46-404a-a87e-6f16903e88da" class="message"><span>ChatGpt:</span><p id="0b5a96eb-8d46-404a-a87e-6f16903e88da">  IndexedDB的存储容量是没有限制的，但是不同的浏览器对IndexedDB的存储容量有不同的限制。一般来说，IndexedDB的存储容量在几十MB到几百MB之间，具体容量取决于浏览器和设备的硬件性能。如果需要保存大量的聊天记录，可以考虑使用分页或者定期清理旧的聊天记录来减少IndexedDB的存储压力。</p></div>`;
+// 						messageDOM.innerHTML = JSON.parse(value)
+// 		});
+				}
+			},
+		});
+
+		app.use(vant);
+		// 通过 CDN 引入时不会自动注册 Lazyload 组件
+		// 可以通过下面的方式手动注册
+		// app.use(vant.Lazyload);
+		app.mount('#app');
+		// console.log(app);
+
+		// 获取DOM元素
+		var messageForm = document.getElementById('message-form');
+		var messageInput = document.getElementById('message-input');
+		var messagesDiv = document.getElementById('messages');
+		let uid = window.localStorage.getItem("uid");
+		var eventSource;
+	</script>
+
+</body>
+
+</html>
